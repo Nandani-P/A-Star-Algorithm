@@ -1,9 +1,8 @@
 #
 # Author: Nandani Patidar
 #
-# AI Project One
+# AI assignment One
 #
-
 from random import randrange, shuffle
 import json
 class Maze(object):    
@@ -13,17 +12,13 @@ class Maze(object):
         for x in range(dimension):
             row = []
             for y in range(dimension):                  
-                if randrange(10) < 7:  
-                    row.append(1)
+                if randrange(10) < 7:  # Marking 70% grid unblocked
+                    row.append(1)       # 1 for unblocked block in the grid
                 else:
-                    row.append(0)
-                
-            shuffle(row)
+                    row.append(0)       # 0 for unblocked block in the grid                
             grid.append(row)
         return grid
-
-         
-        
+     
     def displayMaze(self, arryMaze):      
         for a in arryMaze:
             counter =0
@@ -40,10 +35,8 @@ class Maze(object):
                 print( "| " + res + " |")
                 counter = counter + 1
             print("---------------------")
-        
-    
-    def mulGrid(self, num, dimension):
-        
+           
+    def mulGrid(self, num, dimension):             # function to generate multiple grids       
         with open('storeMaze.txt', 'w') as file:
             for i in range(num):
                 x = json.dumps(self.makeMaze(dimension))
@@ -56,11 +49,9 @@ class Maze(object):
             for i in y:
                 listMaze = (json.loads(i))
                 arryMaze.append(listMaze)
-        return arryMaze
-                
-                
+        return arryMaze               
         
 a = Maze()    
 #a.makeMaze(5, 5)
 #a.mulGrid(5, 5)
-a.displayMaze(a.mulGrid(5, 5))
+#a.displayMaze(a.mulGrid(5, 5))
