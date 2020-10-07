@@ -89,13 +89,16 @@ def algoAstar(maze):
         
         eastX = currentX + 1
         eastY = currentY
+
         northX = currentX
         northY = currentY + 1
+        
         westX = currentX - 1
         westY = currentY 
+
         southX = currentX   
         southY = currentY - 1
-    
+        
         adj_block_X = [eastX, northX, westX, southX]
         adj_block_Y = [eastY, northY, westY, southY]
         
