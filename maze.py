@@ -5,6 +5,8 @@
 #
 from random import randrange, shuffle
 import json
+import copy as cp
+
 class Maze(object):    
     
     def makeMaze(self, dimension):
@@ -17,6 +19,9 @@ class Maze(object):
                 else:
                     row.append(0)       # 0 for unblocked block in the grid                
             grid.append(row)
+        grid[0][0] = 1
+        grid[dimension-1][dimension-1] = 1
+        
         return grid
      
     def displayMaze(self, arryMaze):      
@@ -35,7 +40,24 @@ class Maze(object):
                 print( "| " + res + " |")
                 counter = counter + 1
             print("---------------------")
-           
+
+    def displaySingleMaze(self, Maze):
+            dpMaze = cp.deepcopy(Maze)
+            counter = 0
+            for i in dpMaze:
+                c = 0
+                for j in i:
+                    if j ==1:
+                        i[c] = " "
+                    else:
+                        i[c] = "X"
+                    c = c + 1
+                res = ' | '.join(map(str, dpMaze[counter]))
+                print("---------------------")
+                print( "| " + res + " |")
+                counter = counter + 1
+            print("---------------------")
+            
     def mulGrid(self, num, dimension):             # function to generate multiple grids       
         with open('storeMaze.txt', 'w') as file:
             for i in range(num):
@@ -51,7 +73,8 @@ class Maze(object):
                 arryMaze.append(listMaze)
         return arryMaze               
         
-a = Maze()    
-#a.makeMaze(5, 5)
+#a = Maze()    
+#a.makeMaze(5)
 #a.mulGrid(5, 5)
 #a.displayMaze(a.mulGrid(5, 5))
+#a.displaySingleMaze(a.makeMaze(5))
