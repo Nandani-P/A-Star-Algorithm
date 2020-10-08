@@ -17,10 +17,9 @@ gGrid = []
 fGrid = []
 
 # Initiate H, G and F grids 
-def initiateGrid():
-    global hGrid, gGrid, fGrid
-    
-    for row in maze_gen:
+def initiateGrid(maze):
+    global hGrid, gGrid, fGrid              
+    for row in maze:
         hRow = []
         for block in row:   
             hRow.append(None)
@@ -29,7 +28,9 @@ def initiateGrid():
     gGrid = cp.deepcopy(hGrid)
     fGrid = cp.deepcopy(hGrid)
     
-# Update H value as we explore adjecent nodes
+    
+# Update H, G and F value as we explore adjecent nodes
+
 def upd_H_Val(x, y):                     
     hValue = (targetX - x) + (targetY - y)
     hGrid[x][y] = hValue
@@ -38,7 +39,6 @@ def upd_H_Val(x, y):
  
 def upd_G_Val(x, y, curX, curY):
     #print("Inside g value function, G grid: ", gGrid)
-    
     newGValue = gGrid[curX][curY] + 1
     if (gGrid[x][y] is None) or (gGrid[x][y] > newGValue) :
         gGrid[x][y] = newGValue 
@@ -47,11 +47,14 @@ def upd_G_Val(x, y, curX, curY):
 def upd_F_Val(x, y, fVal):
     fGrid[x][y] = fVal
 
+    
+
 openList = []
 closedList = []
 
 def algoAstar(maze):
-    global openList, closedList
+    global openList, closedList, targetX, targetY
+    targetX = targetY = len(maze)- 1
     preVertex = {}
     startX = 0
     startY = 0
@@ -62,6 +65,7 @@ def algoAstar(maze):
     fVal = hVal + 0
     upd_F_Val(currentX, currentY, fVal)
     currentVertex = [currentX, currentY]
+    
     
     while ( not(currentX == targetX and currentY == targetY)): #while current vertex is not the destination       
         eastX = currentX + 1  
@@ -96,7 +100,6 @@ def algoAstar(maze):
                         print("Current Vertex: ", currentVertex)
                         print("Adj Coordinates: ", coordinates)
                         gVal = upd_G_Val(x, y, currentX, currentY)
-                        #print("G Value: ", gVal)
                         #print("G grid: ", gGrid)
                         hVal = upd_H_Val(x, y)
                         #print("H Value: ", hVal)
@@ -118,7 +121,7 @@ def algoAstar(maze):
                         
         hp.heappush(closedList, currentVertex)
         if (len(openList) > 0):
-            print("Open List", openList)
+            #print("Open List", openList)
             currentTuple = hp.heappop(openList)
         else:
             print("No path exists to target.")
@@ -140,22 +143,7 @@ def algoAstar(maze):
         target = pre
     return path  
 
-a= Maze()
-maze_gen = a.makeMaze(50)
-#print(maze_gen)
 
-targetX = targetY = len(maze_gen)- 1
-
-# Calling display function from Maze class by creating an object of Maze()
-a.displaySingleMaze(maze_gen)
-
-initiateGrid()
-
-# algoAstar return grid path vertex from start position to destination
-path = algoAstar(maze_gen)
-
-# Displaying maze with the shortest path
-a.displaySingleMazeWithPath(path, maze_gen)
 
 
 

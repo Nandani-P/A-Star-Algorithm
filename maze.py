@@ -1,9 +1,10 @@
 #
 # Nandani Patidar & Julian Torres
 #
-# AI assignment One
+# AI assignment One - FAll 2020
 #
 # Generate, display and store Maze
+#
 
 from random import randrange, shuffle
 import json
@@ -57,10 +58,10 @@ class Maze(object):
                     i[c] = "█"
                 c = c + 1
             res = '|'.join(map(str, dpMaze[counter]))
-            print("----"*len(Maze))
+            print("--"*len(Maze))
             print( "|" + res + "|")
             counter = counter + 1
-        print("----"*len(Maze))
+        print("--"*len(Maze))
         return dpMaze
 
     def displaySingleMazeWithPath(self, path, maze): # this function displays grid with path from start to destination
@@ -74,7 +75,7 @@ class Maze(object):
     def mulGrid(self, num, dimension):             # function to generate multiple grids       
         with open('storeMaze.txt', 'w') as file:
             for i in range(num):
-                x = json.dumps(self.makeMaze(dimension))
+                x = json.dumps(self.makeMaze(dimension))    # source of json: https://www.w3schools.com/python/python_json.asp
                 file.write(x + "\n")
                 file.flush()
 
