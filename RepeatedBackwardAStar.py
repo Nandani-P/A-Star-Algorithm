@@ -10,9 +10,7 @@ from random import randrange, shuffle
 import heapq as hp
 import itertools
 import copy as cp
-import time
 
-startTime = time.time()
 hGrid =[]
 gGrid = []
 fGrid = []
@@ -90,17 +88,16 @@ def computePath():
                     if openList[i][2] == (x, y):
                         openList[i], openList[-1] = openList[-1], openList[i]
                         openList.pop()
-                        hp.heapify(openList)
+                        heapq.heapify(openList)
                                                             ##                        print("After heapify open List: ", openList)
                         break
             
                 hp.heappush(openList, (fVal, gVal, (x, y)))
-##                print("Open List: ", openList)
+                                                            ##                print("Open List: ", openList)
 a= Maze( )
-maze = [[1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0], [1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1], [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1], [0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1], [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0], [1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1], [0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1], [1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0], [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0], [0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1], [1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0], [1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1], [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1], [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1], [1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0], [1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1], [0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1]]
+##maze = [[1, 1, 1, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 1], [0, 1, 0, 1, 0], [1, 0, 0, 1, 1]]
                                                             ##print("Maze", maze)
-##maze = a.makeMaze(20)
-#print(maze)
+maze = a.makeMaze(50)
 a.displaySingleMaze(maze)
 
 # Call function to initialize grids
@@ -119,14 +116,14 @@ for row in maze:
         search.append(hRow)
 
 # Defining start and goal         
-sGoal = (len(maze)-1, len(maze)-1)
-sStart = (0, 0)
+sGoal = (0, 0)
+sStart = (len(maze)-1, len(maze)-1)
 
 while(not(sStart == sGoal)):
 
     # A tree which stores parent value of a node 
     tree = {} 
-    counter = counter +1
+    counter = counter + 1
     # Updating g, h, f and search values of start state 
     gStart = 0
     upd_G_Val(sStart, 0)
@@ -189,24 +186,18 @@ while(not(sStart == sGoal)):
                 # checks for adjacent blocks while moving and update thier cost to infinity if blocked
                 if maze[x][y] == 0:
                     costGrid[x][y] = float('inf')
-                    gGrid[x][y] = float('inf')
                 
             #print("Updated start state: ", sStart)
         else:
             #a.displaySingleMazeWithPath(path, costGrid)
             costGrid[i[0]][i[1]] = float('inf')
-            gGrid[i[0]][i[1]] = float('inf')
             break
-
-##print("Cost grid: ", costGrid)
-##print("H grid: ", hGrid)
-##print("F grid: ", fGrid)
-##print("G grid: ", gGrid)
+         
 print("I reached the target")
 print("Path from start state to goal state: ")
 a.displaySingleMazeWithPath(fullPath, costGrid)
 
-print("Time to execute the program is %s seconds" % (time.time() - startTime)) 
+ 
 
                 
 
