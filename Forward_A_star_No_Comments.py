@@ -34,11 +34,9 @@ def initiateGrid(maze):
 def upd_H_Val(x, y):                     
     hValue = (targetX - x) + (targetY - y)
     hGrid[x][y] = hValue
-    #print("hValue- ", hValue)
     return hValue
  
 def upd_G_Val(x, y, curX, curY):
-    #print("Inside g value function, G grid: ", gGrid)
     newGValue = gGrid[curX][curY] + 1
     if (gGrid[x][y] is None) or (gGrid[x][y] > newGValue) :
         gGrid[x][y] = newGValue 
@@ -88,17 +86,15 @@ def algoAstar(maze):
                 coordinates = [x, y]
                 print("-------------------------------------------------------------------")
                 print("Adj Coordinates before check: ", coordinates)
-                print("Closed list : ", closedList)
-                print("Open list : ", openList)
-                print("Maze (", x, y, ") = ", maze[x][y])
+                #print("Closed list : ", closedList)
+                #print("Open list : ", openList)
+               
                 
                 if maze[x][y] == 1:
                     listCoordinates = list(zip(*openList))
 
                     if (len(listCoordinates) == 0 or coordinates not in listCoordinates[1]) and coordinates not in closedList:
                         
-                        print("Current Vertex: ", currentVertex)
-                        print("Adj Coordinates: ", coordinates)
                         gVal = upd_G_Val(x, y, currentX, currentY)
                         #print("G grid: ", gGrid)
                         hVal = upd_H_Val(x, y)
@@ -106,8 +102,7 @@ def algoAstar(maze):
                         fVal = gVal + hVal
                         upd_F_Val(x, y, fVal)
                         #print("F Value: ", fVal)
-                        hp.heappush(openList, (fVal, coordinates))
-                        
+                        hp.heappush(openList, (fVal, gVal, coordinates))
                         preVertex[tuple(coordinates)] = tuple(currentVertex)                  
                                                             
                     elif len(listCoordinates) > 0 and coordinates in listCoordinates[1]:
@@ -116,23 +111,24 @@ def algoAstar(maze):
                         fVal = gVal + hVal
                         if fVal < fGrid[x][y]:
                             upd_F_Val(x, y, fVal)
-                            hp.heappush(openList, (fVal, coordinates))
-                            preVertex[tuple(coordinates)] = tuple(currentVertex)                            
-                        
+                            hp.heappush(openList, (fVal, gVal, coordinates))
+                            preVertex[tuple(coordinates)] = tuple(currentVertex)
+                            
         hp.heappush(closedList, currentVertex)
         if (len(openList) > 0):
-            #print("Open List", openList)
+            print(openList)
             currentTuple = hp.heappop(openList)
+            
         else:
             print("No path exists to target.")
             print("Number of nodes expanded in the search : ", len(openList) + len(closedList))
             exit()
         
-        currentX = currentTuple[1][0]
-        currentY = currentTuple[1][1]
+        currentX = currentTuple[2][0]
+        currentY = currentTuple[2][1]
         currentVertex = [currentX, currentY]
 
-    print("Number of nodes expanded in the search : ", len(openList) + len(closedList))       
+    print("Nodes expanded in the search : ", len(openList) + len(closedList))       
     pre =()
     target = (targetX, targetY)
     path = [target]

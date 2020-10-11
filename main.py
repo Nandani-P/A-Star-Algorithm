@@ -7,12 +7,12 @@
 #
 
 from maze import *
-from Forward_A_star import *
+from RepeatedForwardAStarFirst import *
 import time
 
 startTime = time.time()
 a= Maze()
-maze_gen = a.makeMaze(10)
+maze_gen = a.makeMaze(5)
 
 # Calling display function from Maze class by creating an object of Maze()
 a.displaySingleMaze(maze_gen)

@@ -64,12 +64,33 @@ class Maze(object):
         print("--"*len(Maze))
         return dpMaze
 
+    def displaySingleMazeNoObstacles(self, Maze):
+        dpMaze = cp.deepcopy(Maze)
+        counter = 0
+        for i in dpMaze:
+            c = 0
+            for j in i:
+                if j == 1:
+                    i[c] = " "
+                elif j == 2:
+                    i[c] = "*"   
+                else:
+                    i[c] = "█"
+                c = c + 1
+            res = '|'.join(map(str, dpMaze[counter]))
+            print("--"*len(Maze))
+            print( "|" + res + "|")
+            counter = counter + 1
+        print("--"*len(Maze))
+        return dpMaze
+
     def displaySingleMazeWithPath(self, path, maze): # this function displays grid with path from start to destination
+        dpMaze = cp.deepcopy(maze)
         for i in path:
             x = i[0]
             y = i[1]
-            maze[x][y] = 2
-        a.displaySingleMaze(maze)
+            dpMaze[x][y] = 2
+        a.displaySingleMazeNoObstacles(dpMaze)
              
             
     def mulGrid(self, num, dimension):             # function to generate multiple grids       
