@@ -9,6 +9,7 @@
 from maze import *
 from RepeatedBackwardAStar import *
 from FinalRepeatedForwardAStar import *
+from AdaptiveAStar import *
 import time
 import matplotlib.pyplot as plt
 from matplotlib import colors
@@ -19,16 +20,16 @@ a= Maze()
 
 maze_gen = a.makeMaze(5)
 
-# Calling display function from Maze class by creating an object of Maze()
-a.displaySingleMaze(maze_gen)
+## Calling display function from Maze class by creating an object of Maze()
+##a.displaySingleMaze(maze_gen)
+##
+## algoAstar return grid path vertex from start position to destination
+##path = algoAstar(maze_gen)
+##
+## Displaying maze with the shortest path
+##a.displaySingleMazeWithPath(path, maze_gen)
 
-# algoAstar return grid path vertex from start position to destination
-path = algoAstar(maze_gen)
-
-# Displaying maze with the shortest path
-a.displaySingleMazeWithPath(path, maze_gen)
-
-# Getting 50 mazes of 101*101 from storeMaze.txt file 
+##Getting 50 mazes of 101*101 from storeMaze.txt file 
 with open('storeMaze.txt', 'r') as file:
       y = file.readlines()
       arryMaze = []
@@ -39,7 +40,7 @@ with open('storeMaze.txt', 'r') as file:
 # Iterating 50 mazes of 101*101 from arryMaze and calling Backward A star   
 for maze in arryMaze:
    repeatedbackwardAStar(maze)
-   
+  
 # Iterating 50 mazes of 101*101 from arryMaze and calling Forward A star
 
 ##for maze in arryMaze:
@@ -48,18 +49,18 @@ for maze in arryMaze:
 # Iterating 50 mazes of 101*101 from arryMaze and calling Adaptive A star
 
 ##for maze in arryMaze:
-##   repeatedbackwardAStar(maze)
+##   adaptiveAStar(maze)
 
 
    
 # Displaying a maze using matplotlib library
+##    cmap = colors.ListedColormap(['Blue','red'])   
+##    path = repeatedbackwardAStar(maze_gen)
+##    plt.figure(figsize=(10, 9), dpi=70)
+##    plt.imshow(maze_gen)
+##    #plt.pcolor(path[::-1],cmap=cmap,edgecolors='k', linewidths=3)
+##    plt.show()
 
-##cmap = colors.ListedColormap(['Blue','red'])   
-##path = repeatedbackwardAStar(maze_gen)
-##plt.figure(figsize=(10, 9), dpi=70)
-##plt.imshow(maze_gen)
-###plt.pcolor(path[::-1],cmap=cmap,edgecolors='k', linewidths=3)
-##plt.show()
 
 
 
