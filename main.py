@@ -14,34 +14,45 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 
 startTime = time.time()
+
 a= Maze()
 
 maze_gen = a.makeMaze(5)
 
-### Calling display function from Maze class by creating an object of Maze()
-##a.displaySingleMaze(maze_gen)
-##
-##initiateGrid(maze_gen)
-##
-### algoAstar return grid path vertex from start position to destination
-##path = algoAstar(maze_gen)
-##
-### Displaying maze with the shortest path
-##a.displaySingleMazeWithPath(path, maze_gen)
+# Calling display function from Maze class by creating an object of Maze()
+a.displaySingleMaze(maze_gen)
 
+# algoAstar return grid path vertex from start position to destination
+path = algoAstar(maze_gen)
+
+# Displaying maze with the shortest path
+a.displaySingleMazeWithPath(path, maze_gen)
+
+# Getting 50 mazes of 101*101 from storeMaze.txt file 
 with open('storeMaze.txt', 'r') as file:
       y = file.readlines()
       arryMaze = []
       for i in y:
           listMaze = (json.loads(i))
           arryMaze.append(listMaze)
-          
+
+# Iterating 50 mazes of 101*101 from arryMaze and calling Backward A star   
 for maze in arryMaze:
    repeatedbackwardAStar(maze)
    
-          
+# Iterating 50 mazes of 101*101 from arryMaze and calling Forward A star
+
 ##for maze in arryMaze:
 ##   repeatedforwardAStar(maze)
+
+# Iterating 50 mazes of 101*101 from arryMaze and calling Adaptive A star
+
+##for maze in arryMaze:
+##   repeatedbackwardAStar(maze)
+
+
+   
+# Displaying a maze using matplotlib library
 
 ##cmap = colors.ListedColormap(['Blue','red'])   
 ##path = repeatedbackwardAStar(maze_gen)
