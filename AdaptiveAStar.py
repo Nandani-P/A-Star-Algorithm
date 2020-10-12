@@ -12,10 +12,6 @@ import itertools
 import copy as cp
 import time
 
-startTime = time.time()
-hGrid =[]
-gGrid = []
-costGrid = []
 
 # Initiate H, G  grids 
 def initiateGrid(maze):
@@ -51,6 +47,7 @@ def upd_G_Val(state, gValue):
 def computePath():
     while (len(openList)>=1 and gGrid[sGoal[0]][sGoal[1]] > openList[0][0]):
                                                            ##print("Open List before pop: ", openList)
+        global counterOfExpandedCells
         s = hp.heappop(openList)
         sCoordinates = (s[2][0], s[2][1])
                                                            ##print("sCoordinates: ", sCoordinates)   
@@ -88,133 +85,153 @@ def computePath():
                         hp.heapify(openList)
                                                             ##                        print("After heapify open List: ", openList)
                         break
+
+                # Count number of cells added in open list
+                counterOfExpandedCells = counterOfExpandedCells + 1
+                
                 hp.heappush(openList, (fVal, gVal, (x, y)))
                                                             ##                print("Open List: ", openList)
-a= Maze( )
-maze = [[1, 1, 0, 0, 0, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 0, 1, 1], [0, 1, 1, 1, 0, 1, 1, 1, 1, 1], [1, 1, 0, 0, 1, 1, 1, 1, 0, 0], [1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 1, 1, 0, 1, 1, 0], [1, 0, 1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1, 0, 0, 1], [1, 1, 0, 1, 1, 1, 1, 0, 0, 1]]   
+
                                                                                                                         
-##maze = a.makeMaze(10)
-##print("Maze", maze)
-a.displaySingleMaze(maze)
-
-# Call function to initialize grids
-initiateGrid(maze)
-initiateCostGrid(maze)
-
-search = [ ]
-counter = 0
-fullPath = [ ]
-
-# Put search for every state in the grid as 0
-for row in maze:
-        hRow = [ ]
-        for block in row:
-            hRow.append(0)
-        search.append(hRow)
-
-# Defining start and goal         
-sGoal = (len(maze)-1, len(maze)-1)
-sStart = (0, 0)
-
-while(not(sStart == sGoal)):
-
-    # A tree which stores parent value of a node 
-    tree = {} 
-    counter = counter +1
-    # Updating g, h, f and search values of start state 
-    gStart = 0
-    upd_G_Val(sStart, 0)
-    hStart = upd_H_Val(sStart)
-    fStart = gStart + hStart                                                                           ##    fStart = upd_F_Val(gStart, hStart, sStart)
-    search[sStart[0]][sStart[1]] = counter
-
-    # Upadting g and search for goal state 
-    gGoal = float('inf')
-    upd_G_Val(sGoal, gGoal)
-    search[sGoal[0]][sGoal[1]] = counter
+def adaptiveAStar(maze):
     
-    openList = []
-    closedList = []
-    # Push start state into open list which is heap 
-    hp.heappush(openList, (fStart, gStart , sStart))
+    # Records start time of program execution 
+    startTime = time.time()
 
-    # Calling computePath 
-    computePath()
+    global hGrid, gGrid, costGrid, counter, search 
+    hGrid =[]
+    gGrid = []
+    costGrid = []
 
-    # If open list has no element to pop that means there is no path exist to goal
-    if (len(openList) == 0):
-        print("No path exists to target.")
-        a.displaySingleMazeWithPath(fullPath, costGrid)
-        quit()
-                                                                                 ##    print("Open List after compute: ", openList)
-                                                                                 ##    print("G grid after compute: ", gGrid) 
-    # Getting path from the tree
-    pre =()
-    lastValue = sGoal
-    path = [lastValue]
-    while not(pre == sStart):
-        pre =(tree[lastValue])
-        path.insert(0, pre)
-        lastValue = pre
- 
-    # Displays path on the maze
-    #a.displaySingleMazeWithPath(path, costGrid)
+    #a.displaySingleMaze(maze)
 
-    # Update h value
-    gGoal = len(path)
-    for i in openList:
-       x = i[2][0]
-       y = i[2][1]
-       hGrid[x][y] = gGoal - gGrid[x][y]
+    # Call function to initialize grids
+    initiateGrid(maze)
+    initiateCostGrid(maze)
 
-    for j in closedList:
-       x = i[2][0]
-       y = i[2][1]
-       hGrid[x][y] = gGoal - gGrid[x][y]
-       
-    # Agent start moving from start point towards goal by iterating the blocks stored in the path
-    for i in path:
-                                                                  ##        print("i: ", i)
-                                                                  ##        print("Maze %s  %s", maze[i[0]][i[1]])
-        # checks if a block is equal to 1 that means it is unblocked                                                    
-        if maze[i[0]][i[1]] == 1:
-            sStart = i
-            
-            fullPath.append(sStart) 
-            
-            
-            # Explore adjacent blocks when robot moves on the estimated shortest path 
-            adj_block_X = [sStart[0]+1, sStart[0], sStart[0]-1, sStart[0]]
-            adj_block_Y = [sStart[1], sStart[1]+1, sStart[1], sStart[1]-1]
+    search = [ ]
+    counter = 0
+    fullPath = [ ]
+
+    # Put search for every state in the grid as 0
+    for row in maze:
+            hRow = [ ]
+            for block in row:
+                hRow.append(0)
+            search.append(hRow)
+
+    # Defining start and goal
+    global sGoal, sStart, openList, closedList, mazeDimension, tree, counterOfExpandedCells
+    counterOfExpandedCells = 0
+    sGoal = (len(maze)-1, len(maze)-1)
+    sStart = (0, 0)
+    flagQuit = False
+
+    while(not(sStart == sGoal)):
+
+        # A tree which stores parent value of a node 
+        tree = {} 
+        counter = counter +1
+        # Updating g, h, f and search values of start state 
+        gStart = 0
+        upd_G_Val(sStart, 0)
+        hStart = upd_H_Val(sStart)
+        fStart = gStart + hStart                                                                           ##    fStart = upd_F_Val(gStart, hStart, sStart)
+        search[sStart[0]][sStart[1]] = counter
+
+        # Upadting g and search for goal state 
+        gGoal = float('inf')
+        upd_G_Val(sGoal, gGoal)
+        search[sGoal[0]][sGoal[1]] = counter
         
-            for i in range(4):
-                x = adj_block_X[i]
-                y = adj_block_Y[i]
-                if not (x in range(0, sGoal[0]+1) and y in range(0, sGoal[1]+1)):
-                   continue
-                
-                # checks for adjacent blocks while moving and update thier cost to infinity if blocked
-                if maze[x][y] == 0:
-                    costGrid[x][y] = float('inf')
-                    gGrid[x][y] = float('inf')
-                
-                                                                  #print("Updated start state: ", sStart)
-        else:
-            #a.displaySingleMazeWithPath(path, costGrid)
-            costGrid[i[0]][i[1]] = float('inf')
-            gGrid[i[0]][i[1]] = float('inf')
+        openList = []
+        closedList = []
+        # Push start state into open list which is heap 
+        hp.heappush(openList, (fStart, gStart , sStart))
+
+        # Calling computePath 
+        computePath()
+
+        # If open list has no element to pop that means there is no path exist to goal
+        if (len(openList) == 0):
+            print("No path exists to target.")
+            #a.displaySingleMazeWithPath(fullPath, costGrid)
+            print("Number of cells expanded in the search: ", counterOfExpandedCells)
+            flagQuit = True
             break
+                                                                                     ##    print("Open List after compute: ", openList)
+                                                                                     ##    print("G grid after compute: ", gGrid) 
+        # Getting path from the tree
+        pre =()
+        lastValue = sGoal
+        path = [lastValue]
+        while not(pre == sStart):
+            pre =(tree[lastValue])
+            path.insert(0, pre)
+            lastValue = pre
+     
+        # Displays path on the maze
+        #a.displaySingleMazeWithPath(path, costGrid)
 
-                                                                  ##print("Cost grid: ", costGrid)
-                                                                  ##print("H grid: ", hGrid)
-                                                                  ##print("F grid: ", fGrid)
-                                                                  ##print("G grid: ", gGrid)
-print("I reached the target")
-print("Path from start state to goal state: ")
-a.displaySingleMazeWithPath(fullPath, costGrid)
-print("Time to execute the program by adaptive A* is %s seconds" % (time.time() - startTime)) 
+        # Update h value
+        gGoal = len(path)
+        for i in openList:
+           x = i[2][0]
+           y = i[2][1]
+           hGrid[x][y] = gGoal - gGrid[x][y]
 
-                                                                  ##print("Closed List: ", closedList)                
+        for j in closedList:
+           x = i[2][0]
+           y = i[2][1]
+           hGrid[x][y] = gGoal - gGrid[x][y]
+           
+        # Agent start moving from start point towards goal by iterating the blocks stored in the path
+        for i in path:
+                                                                      ##        print("i: ", i)
+                                                                      ##        print("Maze %s  %s", maze[i[0]][i[1]])
+            # checks if a block is equal to 1 that means it is unblocked                                                    
+            if maze[i[0]][i[1]] == 1:
+                sStart = i
+                
+                fullPath.append(sStart) 
+                
+                
+                # Explore adjacent blocks when robot moves on the estimated shortest path 
+                adj_block_X = [sStart[0]+1, sStart[0], sStart[0]-1, sStart[0]]
+                adj_block_Y = [sStart[1], sStart[1]+1, sStart[1], sStart[1]-1]
+            
+                for i in range(4):
+                    x = adj_block_X[i]
+                    y = adj_block_Y[i]
+                    if not (x in range(0, sGoal[0]+1) and y in range(0, sGoal[1]+1)):
+                       continue
+                    
+                    # checks for adjacent blocks while moving and update thier cost to infinity if blocked
+                    if maze[x][y] == 0:
+                        costGrid[x][y] = float('inf')
+                        gGrid[x][y] = float('inf')
+                    
+                                                                      #print("Updated start state: ", sStart)
+            else:
+                #a.displaySingleMazeWithPath(path, costGrid)
+                costGrid[i[0]][i[1]] = float('inf')
+                gGrid[i[0]][i[1]] = float('inf')
+                break
+
+                                                                      ##print("Cost grid: ", costGrid)
+                                                                      ##print("H grid: ", hGrid)
+                                                                      ##print("F grid: ", fGrid)
+                                                                      ##print("G grid: ", gGrid)
+    if flagQuit is not True:
+        print("I reached the target")
+        print("Path from start state to goal state: ")
+        #a.displaySingleMazeWithPath(fullPath, costGrid)
+        print("Number of cells expanded in the search: ", counterOfExpandedCells)
+        print("Time to execute the program by adaptive A* is %s seconds" % (time.time() - startTime))
+        
+    return fullPath 
+
+                                                                      ##print("Closed List: ", closedList)                
 
 
 

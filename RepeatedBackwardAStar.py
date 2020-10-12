@@ -45,6 +45,7 @@ def upd_G_Val(state, gValue):
 def computePath():
     while (len(openList)>=1 and gGrid[sGoal[0]][sGoal[1]] > openList[0][0]):
                                                             ##        print("Open List before pop: ", openList)
+        global counterOfExpandedCells
         s = hp.heappop(openList)
         sCoordinates = (s[2][0], s[2][1])
                                                            ##print("sCoordinates: ", sCoordinates)   
@@ -81,7 +82,9 @@ def computePath():
                         hp.heapify(openList)
                                                             ##                        print("After heapify open List: ", openList)
                         break
-            
+                # Count number of cells added in open list
+                counterOfExpandedCells = counterOfExpandedCells + 1
+                
                 hp.heappush(openList, (fVal, gVal, (x, y)))
                                                             ##                print("Open List: ", openList)
                                                                                                                         
@@ -97,7 +100,7 @@ def repeatedbackwardAStar(maze):
     gGrid = []
     costGrid = []
     
-    a.displaySingleMaze(maze)
+    #a.displaySingleMaze(maze)
 
     # Call function to initialize grids
     initiateGrid(maze)
@@ -115,7 +118,8 @@ def repeatedbackwardAStar(maze):
         search.append(hRow)
 
     # Defining start and goal         
-    global sGoal, sStart, openList, closedList, mazeDimension, tree
+    global sGoal, sStart, openList, closedList, mazeDimension, tree, counterOfExpandedCells
+    counterOfExpandedCells = 0
     sGoal = (0, 0)
     mazeDimension = len(maze)
     sStart = (mazeDimension-1, mazeDimension-1)
@@ -149,7 +153,8 @@ def repeatedbackwardAStar(maze):
         
         if (len(openList) == 0):
             print("No path exists to target.")
-            a.displaySingleMazeWithPath(fullPath, costGrid)
+            #a.displaySingleMazeWithPath(fullPath, costGrid)
+            print("Number of cells expanded in the search: ", counterOfExpandedCells)
             flagQuit = True
             break
        
@@ -201,7 +206,8 @@ def repeatedbackwardAStar(maze):
     if flagQuit is not True:
         print("I reached the target")
         print("Path from start state to goal state: ")
-        a.displaySingleMazeWithPath(fullPath, costGrid)
+        #a.displaySingleMazeWithPath(fullPath, costGrid)
+        print("Number of cells expanded in the search: ", counterOfExpandedCells)
         print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
 
     return fullPath
