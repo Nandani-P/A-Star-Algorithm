@@ -12,7 +12,8 @@ import time
 
 startTime = time.time()
 a= Maze()
-maze_gen = a.makeMaze(5)
+
+##maze_gen = a.makeMaze(5)
 
 ### Calling display function from Maze class by creating an object of Maze()
 ##a.displaySingleMaze(maze_gen)
@@ -27,6 +28,10 @@ maze_gen = a.makeMaze(5)
 
 
 repeatedbackwardAStar()
+for maze in arryMaze:
+   repeatedbackwardAStar(maze)
 
 
 print("Time to execute the all programs is %s seconds" % (time.time() - startTime))
+
+

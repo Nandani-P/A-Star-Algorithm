@@ -58,10 +58,10 @@ class Maze(object):
                     i[c] = "█"
                 c = c + 1
             res = '|'.join(map(str, dpMaze[counter]))
-            print("--"*len(Maze))
+            print("--"*len(dpMaze))
             print( "|" + res + "|")
             counter = counter + 1
-        print("--"*len(Maze))
+        print("--"*len(dpMaze))
         return dpMaze
 
     def displaySingleMazeNoObstacles(self, Maze):
@@ -78,10 +78,10 @@ class Maze(object):
                     i[c] = "█"
                 c = c + 1
             res = '|'.join(map(str, dpMaze[counter]))
-            print("--"*len(Maze))
+            print("--"*len(dpMaze))
             print( "|" + res + "|")
             counter = counter + 1
-        print("--"*len(Maze))
+        print("--"*len(dpMaze))
         return dpMaze
 
     def displaySingleMazeWithPath(self, path, maze): # this function displays grid with path from start to destination

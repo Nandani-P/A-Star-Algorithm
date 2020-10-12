@@ -12,16 +12,10 @@ import itertools
 import copy as cp
 import time
 
-# Records start time of program execution
-startTime = time.time()
-
-hGrid =[]
-gGrid = []
-costGrid = []
 
 # Initiate H, G and F grids 
 def initiateGrid(maze):
-    global hGrid, gGrid            
+    global gGrid
     for row in maze:
         hRow = []
         for block in row:   
@@ -40,7 +34,7 @@ def initiateCostGrid(maze):
         costGrid.append(hRow)
           
 def upd_H_Val(state):
-    hValue = (sGoal[0] - state[0]) + (sGoal[1] - state[1])
+    hValue = (state[0]- sGoal[0]) + (state[1]- sGoal[1])
     hGrid[state[0]][state[1]] = hValue
     return hValue  
 
@@ -90,19 +84,19 @@ def computePath():
             
                 hp.heappush(openList, (fVal, gVal, (x, y)))
                                                             ##                print("Open List: ", openList)
-
-
-##maze = [[1, 1, 0, 0, 0, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 0, 1, 1], [0, 1, 1, 1, 0, 1, 1, 1, 1, 1], [1, 1, 0, 0, 1, 1, 1, 1, 0, 0], [1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 1, 1, 0, 1, 1, 0], [1, 0, 1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1, 0, 0, 1], [1, 1, 0, 1, 1, 1, 1, 0, 0, 1]]   
                                                                                                                         
-##maze = a.makeMaze(10)
-##print("Maze", maze)
 
-##arryMaze = a.mulGrid(5, 5)
 
-def repeatedbackwardAStar():
+def repeatedbackwardAStar(maze):
+
+    # Records start time of program execution
+    startTime = time.time()
     
-    a = Maze( )
-    maze = a.makeMaze(10)
+    global hGrid, gGrid, costGrid 
+    hGrid =[]
+    gGrid = []
+    costGrid = []
+    
     a.displaySingleMaze(maze)
 
     # Call function to initialize grids
@@ -122,11 +116,11 @@ def repeatedbackwardAStar():
         search.append(hRow)
 
     # Defining start and goal         
-    global sGoal, sStart, openList, closedList, mazeDimension
+    global sGoal, sStart, openList, closedList, mazeDimension, tree
     sGoal = (0, 0)
     mazeDimension = len(maze)
-    sStart = (len(maze)-1, len(maze)-1)
-
+    sStart = (mazeDimension-1, mazeDimension-1)
+    flagQuit = False
     while(not(sStart == sGoal)):
 
         # A tree which stores parent value of a node 
@@ -134,6 +128,7 @@ def repeatedbackwardAStar():
         counter = counter + 1
         # Updating g, h, f and search values of start state 
         gStart = 0
+        
         upd_G_Val(sStart, 0)
         hStart = upd_H_Val(sStart)
         fStart = gStart + hStart                                                               
@@ -155,7 +150,8 @@ def repeatedbackwardAStar():
         if (len(openList) == 0):
             print("No path exists to target.")
             a.displaySingleMazeWithPath(fullPath, costGrid)
-            quit()
+            flagQuit = True
+            break
        
         # Getting path from the tree
         pre =()
@@ -200,12 +196,17 @@ def repeatedbackwardAStar():
     ##            a.displaySingleMazeWithPath(path, costGrid)
                 costGrid[i[0]][i[1]] = float('inf')
                 break
-    ##    a.displaySingleMazeWithPath(fullPath, costGrid)  
-    print("I reached the target")
-    print("Path from start state to goal state: ")
-    a.displaySingleMazeWithPath(fullPath, costGrid)
-    print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
+    ##    a.displaySingleMazeWithPath(fullPath, costGrid)
 
+    if flagQuit is not True:
+        print("I reached the target")
+        print("Path from start state to goal state: ")
+        a.displaySingleMazeWithPath(fullPath, costGrid)
+        print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
+                    
+    
+
+   
 
  
 
