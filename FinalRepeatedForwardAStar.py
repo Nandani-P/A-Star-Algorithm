@@ -1,9 +1,9 @@
-#  
+#
 # Nandani Patidar & Julian Torres
 #
 # AI Assignment One - Fall 2020
 #
-# Implementation of Repeated Backward A* algorithm
+# Implementation of Forward repeated A* algorithm
 #
 from maze import *
 from random import randrange, shuffle
@@ -15,7 +15,7 @@ import time
 
 # Initiate H, G and F grids 
 def initiateGrid(maze):
-    global gGrid
+    global hGrid, gGrid            
     for row in maze:
         hRow = []
         for block in row:   
@@ -23,6 +23,7 @@ def initiateGrid(maze):
         hGrid.append(hRow)
         
     gGrid = cp.deepcopy(hGrid)
+  
  
 # Initialize cost of every node from its adjacent node as 1  
 def initiateCostGrid(maze):
@@ -34,34 +35,35 @@ def initiateCostGrid(maze):
         costGrid.append(hRow)
           
 def upd_H_Val(state):
-    hValue = (state[0]- sGoal[0]) + (state[1]- sGoal[1])
+    hValue = (sGoal[0] - state[0]) + (sGoal[1] - state[1])
     hGrid[state[0]][state[1]] = hValue
     return hValue  
 
-def upd_G_Val(state, gValue):      
+def upd_G_Val(state, gValue):    
     gGrid[state[0]][state[1]] = gValue
     return gValue
 
+
 def computePath():
     while (len(openList)>=1 and gGrid[sGoal[0]][sGoal[1]] > openList[0][0]):
-                                                            ##        print("Open List before pop: ", openList)
+                                                           ##print("Open List before pop: ", openList)
         s = hp.heappop(openList)
         sCoordinates = (s[2][0], s[2][1])
                                                            ##print("sCoordinates: ", sCoordinates)   
                                                            ##print("Open List: ", openList)
         closedList.append(s)
-
+                                                            ##        print("Closed List: ", closedList)  
         # Exploring adjacent blocks of state s 
-        adj_block_X = [sCoordinates[0]-1, sCoordinates[0], sCoordinates[0]+1,  sCoordinates[0]]
-        adj_block_Y = [sCoordinates[1],  sCoordinates[1]-1, sCoordinates[1], sCoordinates[1]+1]
+        adj_block_X = [sCoordinates[0]+1, sCoordinates[0]-1, sCoordinates[0],  sCoordinates[0]]
+        adj_block_Y = [sCoordinates[1],  sCoordinates[1], sCoordinates[1]+1, sCoordinates[1]-1]
         
         for i in range(4):
             x = adj_block_X[i]
             y = adj_block_Y[i]
-                                                                ##            print("x, y ", x, y)
-            if not (x in range(0, mazeDimension) and y in range(0, mazeDimension)):
+                                                          ##print("x, y ", x, y)
+            if not (x in range(0, sGoal[0]+1) and y in range(0, sGoal[1]+1)):
                continue
-                                                          ##            print("Counter: ", counter)
+                                                          ##print("Counter: ", counter)
                                                           ##print("search: ", search[x][y])
             if search[x][y] < counter:
                 gGrid[x][y] = float('inf')
@@ -74,24 +76,26 @@ def computePath():
                 gVal = gGrid[x][y]
                 hVal = upd_H_Val((x, y))
                 fVal = gVal + hVal    
-                for i in range(len(openList)):              # Logic taken from: https://stackoverflow.com/questions/13800947/deleting-from-python-heapq-in-ologn/13801331
+                for i in range(len(openList)):     # Logic taken from: https://stackoverflow.com/questions/13800947/deleting-from-python-heapq-in-ologn/13801331
                     if openList[i][2] == (x, y):
                         openList[i], openList[-1] = openList[-1], openList[i]
                         openList.pop()
                         hp.heapify(openList)
                                                             ##                        print("After heapify open List: ", openList)
                         break
-            
-                hp.heappush(openList, (fVal, gVal, (x, y)))
-                                                            ##                print("Open List: ", openList)
-                                                                                                                        
+                # Open list with smaller g value implementation
+##                hp.heappush(openList, (fVal, gVal, (x, y)))
+
+                # Openlist with larger g value implementation
+                hp.heappush(openList, (fVal, -gVal, (x, y)))
 
 
-def repeatedbackwardAStar(maze):
 
-    # Records start time of program execution
+def repeatedforwardAStar(maze):
+
+    # Records start time of program execution    
     startTime = time.time()
-    
+
     global hGrid, gGrid, costGrid, counter, search 
     hGrid =[]
     gGrid = []
@@ -102,36 +106,34 @@ def repeatedbackwardAStar(maze):
     # Call function to initialize grids
     initiateGrid(maze)
     initiateCostGrid(maze)
- 
-    counter = 0
+
     search = [ ]
+    counter = 0
     fullPath = [ ]
 
     # Put search for every state in the grid as 0
     for row in maze:
-        hRow = [ ]
-        for block in row:
-            hRow.append(0)
-        search.append(hRow)
+            hRow = [ ]
+            for block in row:
+                hRow.append(0)
+            search.append(hRow)
 
-    # Defining start and goal         
+    # Defining start and goal
     global sGoal, sStart, openList, closedList, mazeDimension, tree
-    sGoal = (0, 0)
-    mazeDimension = len(maze)
-    sStart = (mazeDimension-1, mazeDimension-1)
-    flagQuit = False
+    sGoal = (len(maze)-1, len(maze)-1)
+    sStart = (0, 0)
+    flagQuit = False    
     
     while(not(sStart == sGoal)):
 
         # A tree which stores parent value of a node 
         tree = {} 
-        counter = counter + 1
+        counter = counter +1
         # Updating g, h, f and search values of start state 
         gStart = 0
-        
         upd_G_Val(sStart, 0)
         hStart = upd_H_Val(sStart)
-        fStart = gStart + hStart                                                               
+        fStart = gStart + hStart
         search[sStart[0]][sStart[1]] = counter
 
         # Upadting g and search for goal state 
@@ -152,7 +154,9 @@ def repeatedbackwardAStar(maze):
             a.displaySingleMazeWithPath(fullPath, costGrid)
             flagQuit = True
             break
-       
+
+                                                                        ##    print("Closed List in the middle: ", closedList)
+                                                                        ##    print("########################################################################")
         # Getting path from the tree
         pre =()
         lastValue = sGoal
@@ -161,9 +165,9 @@ def repeatedbackwardAStar(maze):
             pre =(tree[lastValue])
             path.insert(0, pre)
             lastValue = pre
-       
+
         # Displays path on the maze
-    ##    a.displaySingleMazeWithPath(path, costGrid)
+        #a.displaySingleMazeWithPath(path, costGrid)
 
         
         # Agent start moving from start point towards goal by iterating the blocks stored in the path
@@ -184,36 +188,34 @@ def repeatedbackwardAStar(maze):
                 for i in range(4):
                     x = adj_block_X[i]
                     y = adj_block_Y[i]
-                    if not (x in range(0, mazeDimension) and y in range(0, mazeDimension)):
+                    if not (x in range(0, sGoal[0]+1) and y in range(0, sGoal[1]+1)):
                        continue
                     
                     # checks for adjacent blocks while moving and update thier cost to infinity if blocked
                     if maze[x][y] == 0:
                         costGrid[x][y] = float('inf')
+                        gGrid[x][y] = float('inf')
                     
-                                                                    ##            print("Updated start state: ", sStart)
+                                                                        #print("Updated start state: ", sStart)
             else:
-    ##            a.displaySingleMazeWithPath(path, costGrid)
+                #a.displaySingleMazeWithPath(path, costGrid)
                 costGrid[i[0]][i[1]] = float('inf')
+                gGrid[i[0]][i[1]] = float('inf')
                 break
-    ##    a.displaySingleMazeWithPath(fullPath, costGrid)
 
+                                                                        ##print("Cost grid: ", costGrid)
+                                                                        ##print("H grid: ", hGrid)
+                                                                        ##print("F grid: ", fGrid)
+                                                                        ##print("G grid: ", gGrid)
     if flagQuit is not True:
         print("I reached the target")
         print("Path from start state to goal state: ")
         a.displaySingleMazeWithPath(fullPath, costGrid)
-        print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
+
+        print("Time to execute the program by repeated forward A* is %s seconds" % (time.time() - startTime)) 
 
     return fullPath
-                    
     
-
-   
-
- 
-
-                
-
 
 
 
