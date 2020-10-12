@@ -36,7 +36,7 @@ class Maze(object):
                     if j ==1:
                         i[c] = " "
                     else:
-                        i[c] = "X"
+                        i[c] = "█"
                     c = c + 1
                 res = ' | '.join(map(str, a[counter]))
                 print("----" *len(arryMaze))
