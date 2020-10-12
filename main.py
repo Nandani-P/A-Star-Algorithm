@@ -9,11 +9,13 @@
 from maze import *
 from RepeatedBackwardAStar import *
 import time
+import matplotlib.pyplot as plt
+from matplotlib import colors
 
 startTime = time.time()
 a= Maze()
 
-##maze_gen = a.makeMaze(5)
+maze_gen = a.makeMaze(5)
 
 ### Calling display function from Maze class by creating an object of Maze()
 ##a.displaySingleMaze(maze_gen)
@@ -32,10 +34,19 @@ with open('storeMaze.txt', 'r') as file:
       for i in y:
           listMaze = (json.loads(i))
           arryMaze.append(listMaze)
+          
+##for maze in arryMaze:
+##   repeatedbackwardAStar(maze)
+   
 
 
-for maze in arryMaze:
-   repeatedbackwardAStar(maze)
+cmap = colors.ListedColormap(['Blue','red'])   
+path = repeatedbackwardAStar(maze_gen)
+plt.figure(figsize=(10, 9), dpi=70)
+plt.imshow(maze_gen)
+#plt.pcolor(path[::-1],cmap=cmap,edgecolors='k', linewidths=3)
+plt.show()
+
 
 
 print("Time to execute the all programs is %s seconds" % (time.time() - startTime))

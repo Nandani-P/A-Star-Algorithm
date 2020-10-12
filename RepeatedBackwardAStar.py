@@ -203,6 +203,8 @@ def repeatedbackwardAStar(maze):
         print("Path from start state to goal state: ")
         a.displaySingleMazeWithPath(fullPath, costGrid)
         print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
+
+    return fullPath
                     
     
 
