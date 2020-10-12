@@ -26,8 +26,14 @@ a= Maze()
 ### Displaying maze with the shortest path
 ##a.displaySingleMazeWithPath(path, maze_gen)
 
+with open('storeMaze.txt', 'r') as file:
+      y = file.readlines()
+      arryMaze = []
+      for i in y:
+          listMaze = (json.loads(i))
+          arryMaze.append(listMaze)
 
-repeatedbackwardAStar()
+
 for maze in arryMaze:
    repeatedbackwardAStar(maze)
 
