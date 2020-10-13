@@ -13,57 +13,75 @@ from AdaptiveAStar import *
 import time
 import matplotlib.pyplot as plt
 from matplotlib import colors
+import sys
+
+
+arg = sys.argv[1]
+print ("The script has the name %s" % (arg))
+
 
 startTime = time.time()
 
 a= Maze()
 
-maze_gen = a.makeMaze(5)
+# Calling the function to generate 50 mazes of dimension 101*101 and load mazes in the .txt file
+a.storeMulGrid(50, 101)
 
-## Calling display function from Maze class by creating an object of Maze()
-##a.displaySingleMaze(maze_gen)
-##
-## algoAstar return grid path vertex from start position to destination
-##path = algoAstar(maze_gen)
-##
-## Displaying maze with the shortest path
-##a.displaySingleMazeWithPath(path, maze_gen)
+## Getting 50 mazes of 101*101 from storeMaze.txt file
+arryMaze = a.getMazesFromFile()
 
-##Getting 50 mazes of 101*101 from storeMaze.txt file 
-with open('storeMaze.txt', 'r') as file:
-      y = file.readlines()
-      arryMaze = []
-      for i in y:
-          listMaze = (json.loads(i))
-          arryMaze.append(listMaze)
+if arg == "backward":
+    
+    # Iterating 50 mazes of 101*101 from arryMaze and calling Backward A star
+    count = 1
+    for maze in arryMaze:
+        
+        print("Maze : ", count)
+        path = repeatedbackwardAStar(maze)
+        print("Number of moves done by the agent: ", len(path))
+        print("----------------------------------------------------------------------------------")
+        count = count + 1
+                                    ##   print("Travelled cells by the agent: ", path)
+    
 
-# Iterating 50 mazes of 101*101 from arryMaze and calling Backward A star   
-for maze in arryMaze:
-   repeatedbackwardAStar(maze)
-  
-# Iterating 50 mazes of 101*101 from arryMaze and calling Forward A star
+if arg == "forward":
+    
+    # Iterating 50 mazes of 101*101 from arryMaze and calling Forward A star
+    count = 1
+    for maze in arryMaze:
+        
+        print("Maze : ", count)
+        path = repeatedforwardAStar(maze)
+        print("Number of moves done by the agent: ", len(path))
+        print("----------------------------------------------------------------------------------")
+        count = count + 1
+                                      ##   print("Travelled cells by the agent: ", path)
 
-##for maze in arryMaze:
-##   repeatedforwardAStar(maze)
 
-# Iterating 50 mazes of 101*101 from arryMaze and calling Adaptive A star
-
-##for maze in arryMaze:
-##   adaptiveAStar(maze)
+if arg == "adaptive":
+    
+    # Iterating 50 mazes of 101*101 from arryMaze and calling Adaptive A star
+    count = 1
+    for maze in arryMaze:
+        
+        print("Maze : ", count)
+        path = adaptiveAStar(maze)
+        print("Number of moves done by the agent: ", len(path))
+        print("----------------------------------------------------------------------------------")
+        count = count + 1
+                                    ##   print("Travelled cells by the agent: ", path)
 
 
    
-# Displaying a maze using matplotlib library
-##    cmap = colors.ListedColormap(['Blue','red'])   
-##    path = repeatedbackwardAStar(maze_gen)
-##    plt.figure(figsize=(10, 9), dpi=70)
-##    plt.imshow(maze_gen)
-##    #plt.pcolor(path[::-1],cmap=cmap,edgecolors='k', linewidths=3)
+### Displaying a maze using matplotlib library
+##for maze in arryMaze:
+##    path = repeatedbackwardAStar(maze)
+##    for i in path:
+##         maze[i[0]][i[1]] = 2                                   
+##    plt.figure(figsize=(10, 9), dpi=70)              # Reference https://stackoverflow.com/questions/52566969/python-mapping-a-2d-array-to-a-grid-with-pyplot  plt.imshow(maze)
 ##    plt.show()
 
 
-
-
+    
 print("Time to execute the all programs is %s seconds" % (time.time() - startTime))
 
-##maze = [[1, 1, 0, 0, 0, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 0, 1, 1], [0, 1, 1, 1, 0, 1, 1, 1, 1, 1], [1, 1, 0, 0, 1, 1, 1, 1, 0, 0], [1, 1, 0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 0, 1, 1, 1, 1, 0, 1, 1, 0], [1, 0, 1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1, 0, 0, 1], [1, 1, 0, 1, 1, 1, 1, 0, 0, 1]]   

@@ -159,6 +159,7 @@ def repeatedforwardAStar(maze):
             print("No path exists to target.")
             #a.displaySingleMazeWithPath(fullPath, costGrid)
             print("Number of cells expanded in the search: ", counterOfExpandedCells)
+            print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
             flagQuit = True
             break
 
