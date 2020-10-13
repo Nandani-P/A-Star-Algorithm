@@ -90,7 +90,7 @@ def computePath():
                 # Count number of cells added in open list
                 counterOfExpandedCells = counterOfExpandedCells + 1
                 
-                hp.heappush(openList, (fVal, gVal, (x, y)))
+                hp.heappush(openList, (fVal, -gVal, (x, y)))
                                                             ##                print("Open List: ", openList)
 
                                                                                                                         
