@@ -33,43 +33,53 @@ arryMaze = a.getMazesFromFile()
 if arg == "backward":
     
     # Iterating 50 mazes of 101*101 from arryMaze and calling Backward A star
+    NoOfMovesByAgent = []
     count = 1
     for maze in arryMaze:
         
         print("Maze : ", count)
         path = repeatedbackwardAStar(maze)
-        print("Number of moves done by the agent: ", len(path))
+        NoOfMovesByAgent.append(path)
+##        print("Number of moves done by the agent: ", len(path))
+##        NoOfMovesByAgent.append(len(path))
         print("----------------------------------------------------------------------------------")
         count = count + 1
+    print(NoOfMovesByAgent)
                                     ##   print("Travelled cells by the agent: ", path)
     
 
 if arg == "forward":
     
     # Iterating 50 mazes of 101*101 from arryMaze and calling Forward A star
+    NoOfMovesByAgent = []
     count = 1
     for maze in arryMaze:
         
         print("Maze : ", count)
         path = repeatedforwardAStar(maze)
-        print("Number of moves done by the agent: ", len(path))
+        NoOfMovesByAgent.append(path)
+##        print("Number of moves done by the agent: ", len(path))
+##        NoOfMovesByAgent.append(len(path))
         print("----------------------------------------------------------------------------------")
         count = count + 1
-                                      ##   print("Travelled cells by the agent: ", path)
+ 
+    print(NoOfMovesByAgent)                                  ##   print("Travelled cells by the agent: ", path)
 
 
 if arg == "adaptive":
     
     # Iterating 50 mazes of 101*101 from arryMaze and calling Adaptive A star
+    NoOfMovesByAgent = []
     count = 1
     for maze in arryMaze:
         
         print("Maze : ", count)
         path = adaptiveAStar(maze)
-        print("Number of moves done by the agent: ", len(path))
+        NoOfMovesByAgent.append(path)
+##        print("Number of moves done by the agent: ", len(path))
         print("----------------------------------------------------------------------------------")
         count = count + 1
-                                    ##   print("Travelled cells by the agent: ", path)
+    print(NoOfMovesByAgent)                               ##   print("Travelled cells by the agent: ", path)
 
 
    

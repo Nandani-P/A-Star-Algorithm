@@ -47,12 +47,13 @@ def upd_G_Val(state, gValue):
 def computePath():
     while (len(openList)>=1 and gGrid[sGoal[0]][sGoal[1]] > openList[0][0]):
                                                            ##print("Open List before pop: ", openList)
-        global counterOfExpandedCells
+        global counterOfExpandedCells, CounterOfActualExpandedCells
         s = hp.heappop(openList)
         sCoordinates = (s[2][0], s[2][1])
                                                            ##print("sCoordinates: ", sCoordinates)   
                                                            ##print("Open List: ", openList)
         closedList.append(s)
+        CounterOfActualExpandedCells = CounterOfActualExpandedCells + 1
                                                            ##        print("Closed List: ", closedList)  
         # Exploring adjacent blocks of state s 
         adj_block_X = [sCoordinates[0]+1, sCoordinates[0], sCoordinates[0]-1,  sCoordinates[0]]
@@ -121,8 +122,9 @@ def adaptiveAStar(maze):
             search.append(hRow)
 
     # Defining start and goal
-    global sGoal, sStart, openList, closedList, mazeDimension, tree, counterOfExpandedCells
+    global sGoal, sStart, openList, closedList, mazeDimension, tree, counterOfExpandedCells, CounterOfActualExpandedCells
     counterOfExpandedCells = 0
+    CounterOfActualExpandedCells = 0
     sGoal = (len(maze)-1, len(maze)-1)
     sStart = (0, 0)
     flagQuit = False
@@ -156,10 +158,12 @@ def adaptiveAStar(maze):
         if (len(openList) == 0):
             print("No path exists to target.")
             #a.displaySingleMazeWithPath(fullPath, costGrid)
-            print("Number of cells expanded in the search: ", counterOfExpandedCells)
-            print("Time to execute the program by repeated backward A* is %s seconds" % (time.time() - startTime))
+            print("Number of cells added in the open List: ", counterOfExpandedCells)
+            print("Number of cells expanded in the search: ", CounterOfActualExpandedCells)
+            timeTaken = time.time() - startTime
+            print("Time to execute the program by repeated backward A* is %s seconds" %timeTaken)
             flagQuit = True
-            break
+            return (CounterOfActualExpandedCells, timeTaken)
                                                                                      ##    print("Open List after compute: ", openList)
                                                                                      ##    print("G grid after compute: ", gGrid) 
         # Getting path from the tree
@@ -227,10 +231,12 @@ def adaptiveAStar(maze):
         print("I reached the target")
         print("Path from start state to goal state: ")
         #a.displaySingleMazeWithPath(fullPath, costGrid)
-        print("Number of cells expanded in the search: ", counterOfExpandedCells)
-        print("Time to execute the program by adaptive A* is %s seconds" % (time.time() - startTime))
+        print("Number of cells added in the open List: ", counterOfExpandedCells)
+        print("Number of cells expanded in the search: ", CounterOfActualExpandedCells)
+        timeTaken = time.time() - startTime
+        print("Time to execute the program by adaptive A* is %s seconds" %timeTaken)
         
-    return fullPath 
+    return(CounterOfActualExpandedCells, timeTaken) 
 
                                                                       ##print("Closed List: ", closedList)                
 
