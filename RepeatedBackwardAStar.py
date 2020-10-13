@@ -86,7 +86,7 @@ def computePath():
                 # Count number of cells added in open list
                 counterOfExpandedCells = counterOfExpandedCells + 1
                 
-                hp.heappush(openList, (fVal, gVal, (x, y)))
+                hp.heappush(openList, (fVal, -gVal, (x, y)))
                                                             ##                print("Open List: ", openList)
                                                                                                                         
 
@@ -161,7 +161,7 @@ def repeatedbackwardAStar(maze):
             timeTaken = time.time() - startTime
             print("Time to execute the program by repeated backward A* is %s seconds" %timeTaken)
             flagQuit = True
-            return (CounterOfActualExpandedCells, timeTaken)
+            return fullPath
        
         # Getting path from the tree
         pre =()
@@ -217,7 +217,7 @@ def repeatedbackwardAStar(maze):
         timeTaken = time.time() - startTime
         print("Time to execute the program by repeated backward A* is %s seconds" %timeTaken)
 
-    return (CounterOfActualExpandedCells, timeTaken)
+    return fullPath
                     
     
 

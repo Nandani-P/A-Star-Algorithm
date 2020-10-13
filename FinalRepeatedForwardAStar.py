@@ -93,10 +93,10 @@ def computePath():
                 counterOfExpandedCells = counterOfExpandedCells + 1
                     
                 # Open list with smaller g value implementation
-##                hp.heappush(openList, (fVal, gVal, (x, y)))
+                hp.heappush(openList, (fVal, gVal, (x, y)))
 
                 # Openlist with larger g value implementation
-                hp.heappush(openList, (fVal, -gVal, (x, y)))
+##                hp.heappush(openList, (fVal, -gVal, (x, y)))
 
 
 

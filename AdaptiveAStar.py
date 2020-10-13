@@ -163,7 +163,7 @@ def adaptiveAStar(maze):
             timeTaken = time.time() - startTime
             print("Time to execute the program by repeated backward A* is %s seconds" %timeTaken)
             flagQuit = True
-            return (CounterOfActualExpandedCells, timeTaken)
+            return fullPath
                                                                                      ##    print("Open List after compute: ", openList)
                                                                                      ##    print("G grid after compute: ", gGrid) 
         # Getting path from the tree
@@ -236,7 +236,7 @@ def adaptiveAStar(maze):
         timeTaken = time.time() - startTime
         print("Time to execute the program by adaptive A* is %s seconds" %timeTaken)
         
-    return(CounterOfActualExpandedCells, timeTaken) 
+    return fullPath
 
                                                                       ##print("Closed List: ", closedList)                
 
