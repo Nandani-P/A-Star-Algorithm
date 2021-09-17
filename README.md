@@ -1,4 +1,4 @@
-# AI Project One - Fall 2020
+# AI Project - Fall 2020
 # Date - 10/12/2020
 
 # Team - Nandani Patidar & Julian Torres
