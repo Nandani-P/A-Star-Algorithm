@@ -3,7 +3,7 @@
 
 # Team - Nandani Patidar & Julian Torres
 # Email - nandani.patidar@rutgers.edu & jlntorres8@gmail.com
-# GitHub link - https://github.com/Nandani-cloud/AI-Project-One.git
+# GitHub link - https://github.com/Nandani-P/A-Star-Algorithm
 
 
 The project contains 4 executable files: -
