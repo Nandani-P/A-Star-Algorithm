@@ -9,7 +9,7 @@
 The project contains 4 executable files: -
 
 1. main.py
-2. FinalRepeatedForwardAStar.py
+2. RepeatedForwardAStar.py
 3. RepeatedBackwardAStar.py
 4. AdaptiveAStar.py
 5. maze.py
@@ -25,7 +25,7 @@ It calls storeMultiGrid function with parameters as (50, 101) and store mazes in
 Then it reads from text file and store mazes in a list and iterate the list to call A*.
 Then it calls forward, backward and adaptive A* algorithm function.  
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
-2. FinalRepeatedForwardAStar.py
+2. RepeatedForwardAStar.py
 
 To run with smaller and larger g value:
 >> Go to computePath() fuction:
