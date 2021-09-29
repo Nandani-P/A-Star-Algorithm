@@ -8,7 +8,7 @@
 
 from maze import *
 from RepeatedBackwardAStar import *
-from FinalRepeatedForwardAStar import *
+from RepeatedForwardAStar import *
 from AdaptiveAStar import *
 import time
 import matplotlib.pyplot as plt
